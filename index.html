@@ -75,7 +75,7 @@
         let days = function() {
           let daysArray = new Array();
           for (let i = 0; i < 7; i++) {
-            let date = new Date();
+            let date = new Date(current);
             date.setDate(current.getDate() - current.getDay() + i);
             let day = date.toLocaleString('default', {  weekday: dayFormat })
             daysArray.push(day);
@@ -84,7 +84,8 @@
         }
         let dates = function() {
           let datesArray = new Array();
-          for (let i = 0; i < current.getDay(); i++) {
+          let numOfSkips = new Date(current.getFullYear(), current.getMonth(), 1).getDay();
+          for (let i = 0; i < numOfSkips; i++) {
             datesArray.push('');
           }
           let numOfDays = new Date(current.getFullYear(), current.getMonth() + 1, 0).getDate();
