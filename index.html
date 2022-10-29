@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Calendar</title>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@300&display=swap');
+      * {
+        margin: 0;
+        padding: 0;
+        border: 0;
+      }
+      body {
+        font-family: 'Ubuntu', sans-serif;
+        font-size: 4vw;
+      }
+      #target {
+        width: 100vw;
+        height: 100vh;
+        box-sizing: border-box;
+        padding: 6% 10%;
+      }
+      .monthContainer, .days, .dates {
+        display: flex;
+      }
+      .monthContainer {
+        flex-direction: column;
+        width: 100%;
+      }
+      .days, .dates {
+        flex-direction: row;
+        align-content: space-between;
+      }
+      .dates {
+        flex-wrap: wrap;
+      }
+      .month, .day, .date {
+        text-align: center;
+        box-sizing: border-box;
+        padding: 4%;
+      }
+      .month {
+        font-size: 1.2em;
+      }
+      .day, .date {
+        width: calc(100% / 7);
+      }
+    </style>
+  </head>
+  <body onload="renderCalendar()">
+    <div id="target">Loading...</div>
+    <script id="template" type="x-tmpl-mustache">
+      <div class="monthContainer">
+        <div class="month">{{month}}</div>
+        <div class="days">
+          {{#days}}
+          <div class="day">{{.}}</div>
+          {{/days}}
+        </div>
+        <div class="dates">
+          {{#dates}}
+          <div class="date">{{.}}</div>
+          {{/dates}}
+        </div>
+      </div>
+    </script>
+    <script src="https://www.unpkg.com/mustache@4.2.0/mustache.min.js"></script>
+    <script>
+      function renderCalendar() {
+        // customization
+        let monthFormat = 'long';
+        let dayFormat = 'short';
+
+        let current = new Date();
+        let month = current.toLocaleString('default', { month: monthFormat });
+        let days = function() {
+          let daysArray = new Array();
+          for (let i = 0; i < 7; i++) {
+            let date = new Date();
+            date.setDate(current.getDate() - current.getDay() + i);
+            let day = date.toLocaleString('default', {  weekday: dayFormat })
+            daysArray.push(day);
+          }
+          return daysArray;
+        }
+        let dates = function() {
+          let datesArray = new Array();
+          for (let i = 0; i < current.getDay(); i++) {
+            datesArray.push('');
+          }
+          let numOfDays = new Date(current.getFullYear(), current.getMonth() + 1, 0).getDate();
+          for (let i = 0; i < numOfDays; i++) {
+            datesArray.push(i+1);
+          }
+          return datesArray;
+        }
+        let template = document.getElementById('template').innerHTML;
+        let rendered = Mustache.render(template,
+          { month: month,
+            days: days,
+            dates: dates}
+        );
+        document.title = `${month} Calendar`;
+        document.getElementById('target').innerHTML = rendered;
+      }
+    </script>
+  </body>
+</html>
