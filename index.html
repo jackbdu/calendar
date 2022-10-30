@@ -68,15 +68,16 @@
         // customization
         let monthFormat = 'long';
         let dayFormat = 'short';
+        let locale = 'default';
 
         let current = new Date();
-        let month = current.toLocaleString('default', { month: monthFormat });
+        let month = current.toLocaleString(locale, { month: monthFormat });
         let days = function() {
           let daysArray = new Array();
           for (let i = 0; i < 7; i++) {
             let date = new Date(current);
             date.setDate(current.getDate() - current.getDay() + i);
-            let day = date.toLocaleString('default', {  weekday: dayFormat })
+            let day = date.toLocaleString(locale, {  weekday: dayFormat })
             daysArray.push(day);
           }
           return daysArray;
